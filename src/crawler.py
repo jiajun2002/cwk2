@@ -13,7 +13,15 @@ def fetch_page(url):
     except requests.RequestException as e:
         print(f"Error fetching page: {e}")
         raise
-    
+
+
+def normalise_url(url):
+	url = url.rstrip('/') 								# Remove trailing slash from the URL
+	if url == "https://quotes.toscrape.com/page/1": 	# Normalise first page URL to the base URL
+		url = "https://quotes.toscrape.com"
+	return url
+
+
 # Extracts all valid links from the HTML content
 def extract_links(html):
 	soup = BeautifulSoup(html, 'html.parser')
@@ -22,14 +30,10 @@ def extract_links(html):
 		href = tag['href']
 		if href.startswith('/'): 				# Only consider relative links that start with '/'
 			link = URL + href 					# Construct the full URL
+			link = normalise_url(link)			# Normalise URL
 			links.append(link) 					# Add the full URL to the list of links
 	return links
 
-def normalise_url(url):
-	url = url.rstrip('/') 								# Remove trailing slash from the URL
-	if url == "https://quotes.toscrape.com/page/1": 	# Normalise first page URL to the base URL
-		url = "https://quotes.toscrape.com"
-	return url
 
 # Main crawling function that uses BFS to traverse website
 def crawl():
@@ -38,7 +42,7 @@ def crawl():
 	pages = {}										# Dictionary to store crawled pages with URL: HTML content as key-value pairs
 
 	while to_visit: 								# BFS loop to crawl through URLs
-		url = normalise_url(to_visit.pop(0))
+		url = to_visit.pop(0)
 		if url in visited:
 			continue
 		
@@ -53,9 +57,12 @@ def crawl():
 			print(f"Error crawling {url}: {e}")
 
 		if to_visit:
-			time.sleep(6) # Sleep for 6 seconds between requests
+			time.sleep(0.5) # Sleep for 0.5 seconds between requests (testing)
+			# time.sleep(6) # Sleep for 6 seconds between requests
 
 	return pages
 
-crawled_pages = crawl()
-print(f"Total pages crawled: {len(crawled_pages)}")
+
+if __name__ == '__main__':
+	crawled_pages = crawl()
+	print(f"Total pages crawled: {len(crawled_pages)}")

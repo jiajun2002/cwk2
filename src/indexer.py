@@ -1,6 +1,6 @@
 import os
 from bs4 import BeautifulSoup
-from crawler import crawl
+from src.crawler import crawl, fetch_page
 import json
 import re
 
@@ -29,8 +29,11 @@ def build_index(pages):
 
 
 def save_index(index, filepath):
-	with open(filepath, 'w') as f:      # Save the index as a JSON file
-		json.dump(index, f)             
+    dirpath = os.path.dirname(filepath)         
+    if dirpath and not os.path.exists(dirpath):  # Create the directory if it doesn't exist
+        os.makedirs(dirpath)
+    with open(filepath, 'w') as f:               # Save the index as a JSON file
+        json.dump(index, f)
 
 
 def load_index(filepath):
@@ -41,7 +44,8 @@ def load_index(filepath):
     
 
 if __name__ == '__main__':
-    pages = crawl()
-    index = build_index(pages)
+    # pages = crawl()
+    pageTest = fetch_page("https://quotes.toscrape.com/page/1")
+    index = build_index({"https://quotes.toscrape.com/page/1": pageTest})
     save_index(index, 'data/index.json')
     print(index)

@@ -18,18 +18,19 @@ class TestIndexer(unittest.TestCase):
         pages = {"https://quotes.toscrape.com": "<span class='text' itemprop='text'>“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”</span>"}
         index = build_index(pages)
         self.assertIn("world", index)
+        self.assertNotIn("span", index)
 
     def test_build_index_frequency(self):
         pages = {"https://quotes.toscrape.com": "<span class='text' itemprop='text'>“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”</span>}"}
         index = build_index(pages)
-        self.assertEqual(index["our"]["https://quotes.toscrape.com"]["frequency"], 2)
+        frequency = index["our"]["https://quotes.toscrape.com"]["frequency"]
+        self.assertEqual(frequency, 2)
 
     def test_build_index_positions(self):
         pages = {"https://quotes.toscrape.com": "<span class='text' itemprop='text'>“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”</span>}"}
         index = build_index(pages)
         positions = index["our"]["https://quotes.toscrape.com"]["positions"]
-        self.assertIsInstance(positions, list)
-        self.assertEqual(len(positions), 2)
+        self.assertEqual(positions, [11, 19])
 
     def test_build_index_multiple_pages(self):
         pages = {

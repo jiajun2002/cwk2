@@ -30,8 +30,7 @@ def extract_links(html):
 		href = tag['href']
 		if href.startswith('/'): 				# Only consider relative links that start with '/'
 			link = URL + href 					# Construct the full URL
-			link = normalise_url(link)			# Normalise URL
-			links.append(link) 					# Add the full URL to the list of links
+			links.append(normalise_url(link)) 	# Add the full normalised URL to the list
 	return links
 
 
@@ -39,7 +38,7 @@ def extract_links(html):
 def crawl():
 	visited = set() 								# Set to keep track of visited URLs to avoid duplicates
 	to_visit = [URL]
-	pages = {}										# Dictionary to store crawled pages with URL: HTML content as key-value pairs
+	pages = {}										# Dictionary to store pages with URL: HTML content as key-value pairs
 
 	while to_visit: 								# BFS loop to crawl through URLs
 		url = to_visit.pop(0)
@@ -52,7 +51,7 @@ def crawl():
 			print(f"Crawled: {url}")
 			links = extract_links(html)
 			to_visit.extend(links) 					# Add new links to the queue
-			visited.add(url)
+			visited.add(url)						# Mark the current URL as visited	
 		except Exception as e:
 			print(f"Error crawling {url}: {e}")
 
@@ -60,9 +59,5 @@ def crawl():
 			time.sleep(0.2) # Sleep for 0.2 seconds between requests (testing)
 			# time.sleep(6) # Sleep for 6 seconds between requests
 
+	print(f"Crawling complete. Total pages crawled: {len(pages)}")
 	return pages
-
-
-# if __name__ == '__main__':
-# 	crawled_pages = crawl()
-# 	print(f"Total pages crawled: {len(crawled_pages)}")

@@ -12,38 +12,46 @@ def main():
 		command = input("Enter command: ").strip().lower()
 		if not command:
 			continue
-		parts = command.split()
+		parts = command.split()    				# Split command into parts to separate the command from its arguments
 		cmd = parts[0]
 
-		if cmd == "build" and len(parts) == 1:
-			pages = crawl()
-			index = build_index(pages)
-			save_index(index, INDEX_FILEPATH)
-			print("Index built and saved.")
+		if cmd == "build":
+			if len(parts) != 1:
+				print("Usage: build (no additional arguments)")
+				continue
+			else:
+				pages = crawl()
+				index = build_index(pages)
+				save_index(index, INDEX_FILEPATH)
+				print("Index saved.")
 		
-		elif cmd == "load" and len(parts) == 1:
-			try:
-				index = load_index(INDEX_FILEPATH)
-				print("Index loaded.")
-			except FileNotFoundError:
-				print("Index file not found. Please build the index first.")
+		elif cmd == "load":
+			if len(parts) != 1:
+				print("Usage: load (no additional arguments)")
+				continue
+			else:
+				try:
+					index = load_index(INDEX_FILEPATH)
+					print("Index loaded.")
+				except FileNotFoundError:
+					print("Index file not found. Please build the index first.")
 
 		elif cmd == "print":
 			if not index:
 				print("Index not loaded. Please build or load the index first.")
 				continue
-			words = parts[1:]
-			result = print_word(index, words)
+			words = parts[1:]                      # Get list of words after the command
+			result = print_word(index, words)      # Call print_word with the list of words, which will handle normalisation and validation
 			print(result)
 
 		elif cmd == "find":
 			if not index:
 				print("Index not loaded. Please build or load the index first.")
 				continue
-			words = parts[1:]
-			result = find_word(index, words)
+			words = parts[1:]                      # Get list of words after the command
+			result = find_word(index, words)       # Call find_word with the list of words, which will handle normalisation and validation
 			for url in result:
-				print(url)
+				print(f"  {url}")
 
 		elif cmd == "help":
 			print("Available commands:")
@@ -58,7 +66,8 @@ def main():
 			break
 
 		else:
-			print("Unknown command. Available commands: build, load, print <word>, find <word1> <word2>.")
+			print("Unknown command.")
+			print("Available commands: build, load, print <word>, find <word1> <word2>.")
 
 if __name__ == "__main__":
 	main()

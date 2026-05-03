@@ -1,10 +1,9 @@
 import os
 from bs4 import BeautifulSoup
-# from src.crawler import crawl, fetch_page
 import json
 import re
 
-
+# Extracts text content from HTML, removing non-content tags and tokenising into lowercase words
 def tokenise(html):
     soup = BeautifulSoup(html, 'html.parser')
     for tag in soup(['script', 'style', 'meta', 'link']): 		# Remove non-content tags
@@ -14,6 +13,7 @@ def tokenise(html):
     return tokens
 
 
+# Builds an inverted index, tracking frequency and positions of each word in each URL
 def build_index(pages):
     index = {}
     print("Building index...")
@@ -22,10 +22,10 @@ def build_index(pages):
         for position, word in enumerate(tokens):   				# Track position of each word in the page
             if word not in index:                       		# Initialize index entry for new words
                 index[word] = {}
-            if url not in index[word]:                  		# Initialize index entry for new URLs
+            if url not in index[word]:                  		# Initialize index entry for new URLs for word
                 index[word][url] = {"frequency": 0, "positions": []}  
-            index[word][url]["frequency"] += 1               	# Increment frequency count for the word in the URL
-            index[word][url]["positions"].append(position)   	# Add position to the list of positions for the word in the URL
+            index[word][url]["frequency"] += 1               	# Increment frequency for the word in the URL
+            index[word][url]["positions"].append(position)   	# Add position to the list for the word in the URL
     print("Index built.")
     return index
 
@@ -39,16 +39,8 @@ def save_index(index, filepath):
 
 
 def load_index(filepath):
-	if not os.path.exists(filepath):     # Check if the index file exists before trying to load it
+	if not os.path.exists(filepath):             # Check if the index file exists before trying to load it
 		raise FileNotFoundError(f"Index file not found: {filepath}")
-	with open(filepath, 'r') as f:       # Load the index from a JSON file
+	with open(filepath, 'r') as f:               # Load the index from a JSON file
 		return json.load(f)
     
-
-# if __name__ == '__main__':
-#     pages = crawl()
-#     # pageTest = fetch_page("https://quotes.toscrape.com/page/1")
-#     # index = build_index({"https://quotes.toscrape.com/page/1": pageTest})
-#     index = build_index(pages)
-#     save_index(index, 'data/index.json')
-#     print(index)

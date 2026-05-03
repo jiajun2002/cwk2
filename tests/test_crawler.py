@@ -94,7 +94,7 @@ class TestCrawler(unittest.TestCase):
     def test_crawl_observes_politeness_window(self, mock_fetch, mock_sleep):
         mock_fetch.return_value = "<html><body><a href='/page/2/'>Next</a></body></html>"
         crawl()
-        mock_sleep.assert_called_with(0.2)
+        mock_sleep.assert_called_with(6)
 
 if __name__ == '__main__':
     unittest.main()

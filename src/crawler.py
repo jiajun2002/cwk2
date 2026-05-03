@@ -56,8 +56,7 @@ def crawl():
 			print(f"Error crawling {url}: {e}")
 
 		if to_visit:
-			time.sleep(0.2) # Sleep for 0.2 seconds between requests (testing)
-			# time.sleep(6) # Sleep for 6 seconds between requests
+			time.sleep(6) 							# Sleep for 6 seconds between requests
 
 	print(f"Crawling complete. Total pages crawled: {len(pages)}")
 	return pages

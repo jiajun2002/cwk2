@@ -67,7 +67,7 @@ def main():
 
 		else:
 			print("Unknown command.")
-			print("Available commands: build, load, print <word>, find <word1> <word2>.")
+			print("Available commands: build, load, print <word>, find <word1> <word2>..., help, exit")
 
 if __name__ == "__main__":
 	main()

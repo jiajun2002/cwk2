@@ -3,7 +3,7 @@ import requests
 from unittest.mock import patch, MagicMock
 from src.crawler import fetch_page, extract_links, normalise_url, crawl
 
-class TestNormaliseUrl(unittest.TestCase):
+class TestCrawler(unittest.TestCase):
     def test_normalise_url_homepage(self):
         """Test that homepage variants are normalized to base URL"""
         self.assertEqual(normalise_url("https://quotes.toscrape.com/"), "https://quotes.toscrape.com")
@@ -19,7 +19,6 @@ class TestNormaliseUrl(unittest.TestCase):
         self.assertEqual(normalise_url("https://quotes.toscrape.com/tag/life/"), "https://quotes.toscrape.com/tag/life")
         self.assertEqual(normalise_url("https://quotes.toscrape.com/tag/inspirational/"), "https://quotes.toscrape.com/tag/inspirational")
 
-class TestExtractLinks(unittest.TestCase):
     def test_extract_links(self):
         """Test that extract_links extracts all relative links"""
         html = '''
@@ -46,8 +45,6 @@ class TestExtractLinks(unittest.TestCase):
         links = extract_links("<html></html>")
         self.assertEqual(links, [])
 
-
-class TestFetchPage(unittest.TestCase):
     @patch('src.crawler.requests.get')
     def test_fetch_page_success(self, mock_get):
         """fetch_page returns HTML on successful response"""
@@ -83,7 +80,6 @@ class TestFetchPage(unittest.TestCase):
         with self.assertRaises(requests.RequestException):
             fetch_page('https://quotes.toscrape.com')
 
-class TestCrawl(unittest.TestCase):
     @patch('src.crawler.time.sleep')
     @patch('src.crawler.fetch_page')
     def test_crawl_returns_pages(self, mock_fetch, mock_sleep):

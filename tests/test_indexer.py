@@ -1,5 +1,4 @@
 import os
-import json
 import unittest
 from src.indexer import tokenise, build_index, save_index, load_index
 
@@ -9,7 +8,7 @@ class TestIndexer(unittest.TestCase):
         tokens = tokenise(html)
         self.assertIn("hello", tokens)
         self.assertIn("world", tokens)
-        self.assertNotIn("var", tokens)  # script should be removed
+        self.assertNotIn("var", tokens)
         
     def test_tokenise_empty_html(self):
         tokens = tokenise("<html></html>")

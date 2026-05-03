@@ -1,6 +1,6 @@
 import os
 from bs4 import BeautifulSoup
-from crawler import crawl, fetch_page
+from src.crawler import crawl, fetch_page
 import json
 import re
 

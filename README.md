@@ -39,8 +39,8 @@ Example Index:
  
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/jiajun2002/cwk2.git
+cd cwk2
  
 # Install dependencies
 pip install -r requirements.txt

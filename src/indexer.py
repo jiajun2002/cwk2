@@ -1,6 +1,6 @@
 import os
 from bs4 import BeautifulSoup
-from src.crawler import crawl, fetch_page
+# from src.crawler import crawl, fetch_page
 import json
 import re
 
@@ -16,6 +16,7 @@ def tokenise(html):
 
 def build_index(pages):
     index = {}
+    print("Building index...")
     for url, html in pages.items():    							# Iterate through each crawled page
         tokens = tokenise(html)	
         for position, word in enumerate(tokens):   				# Track position of each word in the page
@@ -25,6 +26,7 @@ def build_index(pages):
                 index[word][url] = {"frequency": 0, "positions": []}  
             index[word][url]["frequency"] += 1               	# Increment frequency count for the word in the URL
             index[word][url]["positions"].append(position)   	# Add position to the list of positions for the word in the URL
+    print("Index built.")
     return index
 
 
@@ -43,10 +45,10 @@ def load_index(filepath):
 		return json.load(f)
     
 
-if __name__ == '__main__':
-    pages = crawl()
-    # pageTest = fetch_page("https://quotes.toscrape.com/page/1")
-    # index = build_index({"https://quotes.toscrape.com/page/1": pageTest})
-    index = build_index(pages)
-    save_index(index, 'data/index.json')
-    print(index)
+# if __name__ == '__main__':
+#     pages = crawl()
+#     # pageTest = fetch_page("https://quotes.toscrape.com/page/1")
+#     # index = build_index({"https://quotes.toscrape.com/page/1": pageTest})
+#     index = build_index(pages)
+#     save_index(index, 'data/index.json')
+#     print(index)

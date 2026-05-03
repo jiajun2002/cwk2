@@ -63,6 +63,6 @@ def crawl():
 	return pages
 
 
-if __name__ == '__main__':
-	crawled_pages = crawl()
-	print(f"Total pages crawled: {len(crawled_pages)}")
+# if __name__ == '__main__':
+# 	crawled_pages = crawl()
+# 	print(f"Total pages crawled: {len(crawled_pages)}")

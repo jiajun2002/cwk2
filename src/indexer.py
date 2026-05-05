@@ -3,18 +3,34 @@ from bs4 import BeautifulSoup
 import json
 import re
 
+# Common noise words that are not useful for searching
+STOP = {                                             
+    'login', 'next', 'previous',                            # Navigation noise specific to the site
+    'a', 'i',                                               # Single letters 
+    'the', 'and', 'of', 'to', 'in', 'is', 'it', 'by', 'as'  # Common words with no search value
+}
+
 # Extracts text content from HTML, removing non-content tags and tokenising into lowercase words
 def tokenise(html):
     soup = BeautifulSoup(html, 'html.parser')
     for tag in soup(['script', 'style', 'meta', 'link']): 		# Remove non-content tags
         tag.decompose() 
-    text = soup.get_text()
-    tokens = re.findall(r"\b[a-z]+\b", text.lower()) 			# Extract all words, converting to lowercase
-    return tokens
+
+    for a in list(soup.find_all('a')):
+        if a.get_text(strip=True).lower() in STOP:
+            a.decompose()
+
+    text = soup.get_text(separator=' ')
+    text = re.sub(r'\s+', ' ', text).strip()
+    tokens = re.findall(r'\b[a-z]+\b', text.lower())
+    return [t for t in tokens if t not in STOP]
 
 
 # Builds an inverted index, tracking frequency and positions of each word in each URL
 def build_index(pages):
+    if not pages:
+        print("No pages to index.")
+        return {}
     index = {}
     print("Building index...")
     for url, html in pages.items():    							# Iterate through each crawled page

@@ -51,7 +51,7 @@ def save_index(index, filepath):
     if dirpath and not os.path.exists(dirpath):  # Create the directory if it doesn't exist
         os.makedirs(dirpath)
     with open(filepath, 'w') as f:               # Save the index as a JSON file
-        json.dump(index, f)
+        json.dump(index, f, indent=2)
 
 
 def load_index(filepath):
